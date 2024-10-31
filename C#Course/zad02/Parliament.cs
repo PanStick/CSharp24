@@ -15,6 +15,7 @@ namespace C_Course.zad02
         public List<Parliamentalist> Parliamentalists { get; set; }
         event Notify? VoteStart;
         event Notify? VoteEnd;
+        bool _voteInProgress;
         string? _lastVoteSubject;
         int _lastVoteFor;
         int _lastVoteAgainst;
@@ -22,10 +23,11 @@ namespace C_Course.zad02
 
         public Parliament(int parliamentalistCount)
         {
+            _voteInProgress = false;
             Parliamentalists = [];
             for (int i = 0; i < parliamentalistCount; i++)
             {
-                Parliamentalist parliamentalist = new(RegisterVote);
+                Parliamentalist parliamentalist = new(RegisterVote, i + 1);
                 Parliamentalists.Add(parliamentalist);
                 VoteStart += parliamentalist.StartVoting;
                 VoteEnd += parliamentalist.EndVoting;
@@ -34,6 +36,8 @@ namespace C_Course.zad02
 
         void RegisterVote(object? sender, VoteArgs e)
         {
+            Console.WriteLine("Glos parlamentarzysty nr " + e.Parliamentalist
+                                + " to " + (e.Result == true ? "Za" : "Przeciw"));
             if (e.Result)
                 _lastVoteFor++;
             else _lastVoteAgainst++;
@@ -46,9 +50,15 @@ namespace C_Course.zad02
 
         public void StartVoting(string subject)
         {
+            if (_voteInProgress)
+            {
+                Console.WriteLine("Trwa glosowanie nad " + _lastVoteSubject);
+                return;
+            }
             _lastVoteSubject = subject;
             _lastVoteAgainst = 0;
             _lastVoteFor = 0;
+            _voteInProgress = true;
             OnVoteStarted();
         }
 
@@ -58,16 +68,19 @@ namespace C_Course.zad02
         }
         public void EndVoting()
         {
+            _voteInProgress = false;
             OnVoteEnded();
+            ShowResults();
         }
-        public void ShowResults()
+        void ShowResults()
         {
-            Console.WriteLine($"Vote subject: {_lastVoteSubject}\nVotes for: {_lastVoteFor}\nVotes against: {_lastVoteAgainst}");
+            Console.WriteLine($"Temat obrad: {_lastVoteSubject}\nGlosow za: {_lastVoteFor}\nGlosow przeciwko: {_lastVoteAgainst}");
         }
     }
 
     class VoteArgs : EventArgs
     {
         public bool Result { get; set; }
+        public int Parliamentalist { get; set; }
     }
 }

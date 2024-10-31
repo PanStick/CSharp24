@@ -41,25 +41,21 @@ namespace C_Course.zad02
 
             Parliament p = new(parlamentaristsCount);
 
-            Console.WriteLine("Wprowadz temat glosowania");
-
-            string subject = Console.ReadLine();
+            Console.WriteLine("Parlament gotowy do obrad");
 
             while (true)
             {
-                string input = Console.ReadLine();
+                string[] input = Console.ReadLine().Split();
                 //p.Parliamentalists[0].Vote();
-                if (input == "POCZATEK " + subject)
+                if (input[0] == "POCZATEK")
                 {
-                    p.StartVoting(subject);
+                    p.StartVoting(String.Join(" ", input[1..]));
                     for (int i = 0; i < parlamentaristsCount; i++)
                         p.Parliamentalists[i].Vote();
                 }
-                if (input == "KONIEC")
+                if (input[0] == "KONIEC")
                 {
                     p.EndVoting();
-                    p.ShowResults();
-                    break;
                 }
             }
 
