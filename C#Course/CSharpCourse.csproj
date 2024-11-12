@@ -6,7 +6,7 @@
     <RootNamespace>C_Course</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <StartupObject>C_Course.zad02.Program</StartupObject>
+    <StartupObject>C_Course.zad03.Program</StartupObject>
   </PropertyGroup>
 
 </Project>
