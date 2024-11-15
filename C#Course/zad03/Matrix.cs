@@ -10,7 +10,7 @@ namespace C_Course.zad03
     //3.5
     class Matrix<T> where T : IComparable, IFormattable, IAdditionOperators<T, T, T>, IMultiplyOperators<T, T, T>
     {
-        private T[,] _matrix;
+        protected T[,] _matrix;
 
         public Matrix(int rows, int columns) { _matrix = new T[rows, columns]; }
 
@@ -28,9 +28,15 @@ namespace C_Course.zad03
             return _matrix[row, column];
         }
 
-        public Matrix<T> Add(Matrix<T> matrix) { return this + matrix; }
+        public void Add(Matrix<T> matrix)
+        {
+            _matrix = (new Matrix<T>(_matrix) + matrix).GetMatrix();
+        }
 
-        public Matrix<T> Mult(Matrix<T> matrix) { return this * matrix; }
+        public void Mult(Matrix<T> matrix)
+        {
+            _matrix = (new Matrix<T>(_matrix) * matrix).GetMatrix();
+        }
 
         public static Matrix<T> operator +(Matrix<T> a, Matrix<T> b)
         {
@@ -80,30 +86,31 @@ namespace C_Course.zad03
             return result;
         }
 
-        class SquareMatrix<T> : Matrix<T> where T : IComparable, IFormattable, IAdditionOperators<T, T, T>, IMultiplyOperators<T, T, T>
+        
+
+    }
+    class SquareMatrix<T> : Matrix<T> where T : IComparable, IFormattable, IAdditionOperators<T, T, T>, IMultiplyOperators<T, T, T>
+    {
+        public SquareMatrix(T[,] matrix) : base(matrix)
         {
-            public SquareMatrix(T[,] matrix) : base(matrix)
-            {
-                if (matrix.GetLength(0) != matrix.GetLength(1))
-                    throw new ArgumentException("Matrix must have equal number of rows and columns");
-            }
-
-            public SquareMatrix(int order) : base(order, order) { }
-
-            public bool IsDiagonal()
-            {
-                for (int i = 0; i < this.GetLength(0); i++)
-                {
-                    for (int j = 0; j < this.GetLength(1); j++)
-                    {
-                        if (i != j && !this.GetVal(i, j).Equals(0))
-                            return false;
-                    }
-                }
-
-                return true;
-            }
+            if (matrix.GetLength(0) != matrix.GetLength(1))
+                throw new ArgumentException("Matrix must have equal number of rows and columns");
         }
 
+        public SquareMatrix(int order) : base(order, order) { }
+
+        public bool IsDiagonal()
+        {
+            for (int i = 0; i < GetLength(0); i++)
+            {
+                for (int j = 0; j < GetLength(1); j++)
+                {
+                    if (i != j && GetVal(i, j).CompareTo(0) != 0)
+                        return false;
+                }
+            }
+
+            return true;
+        }
     }
 }

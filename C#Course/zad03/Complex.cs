@@ -8,7 +8,7 @@ namespace C_Course.zad03
 {
     //3.4, 3.6
     class Complex<T> : IComparable, IFormattable, IAdditionOperators<Complex<T>, Complex<T>, Complex<T>>, IMultiplyOperators<Complex<T>, Complex<T>, Complex<T>>
-            where T : IComparable, IFormattable, IAdditionOperators<T, T, T>, IMultiplyOperators<T, T, T>
+            where T : INumber<T>//, IComparable, IFormattable, IAdditionOperators<T, T, T>, IMultiplyOperators<T, T, T>, ISubtractionOperators<T, T, T>
     {
         T _real;
         T _imaginary;
@@ -19,8 +19,8 @@ namespace C_Course.zad03
             _imaginary = Imaginary;
         }
 
-        public T GetReal() { return _real; }
-        public T GetImaginary() { return _imaginary; }
+        public T GetReal() => _real;
+        public T GetImaginary() => _imaginary;
 
         public static Complex<T> operator +(Complex<T> a, Complex<T> b)
         {
@@ -29,7 +29,8 @@ namespace C_Course.zad03
 
         public static Complex<T> operator *(Complex<T> a, Complex<T> b)
         {
-            return new Complex<T>(a.GetReal() * b.GetReal(), a.GetImaginary() * b.GetImaginary());
+            return new Complex<T>(a.GetReal() * b.GetReal() - a.GetImaginary() * b.GetImaginary(),
+                                  a.GetReal() * b.GetImaginary() + a.GetImaginary() * b.GetReal());
         }
 
         public int CompareTo(object? obj)

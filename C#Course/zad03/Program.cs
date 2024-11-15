@@ -47,11 +47,17 @@ namespace C_Course.zad03
             //3.5 -> Complex
             Complex<int> val = new(2, 1);
             Complex<int>[,] arr = { { val, val }, { val, val } };
+            Complex<int>[,] diag = { { val, new(0, 0) }, { new(0, 0), val } };
+
             Matrix<Complex<int>> matrix = new(arr);
 
-            Console.WriteLine(val.ToString());
-            Console.WriteLine(matrix.ToString());
-            Console.WriteLine((matrix + matrix).ToString());
+            Console.WriteLine(val);
+            Console.WriteLine(matrix);
+            Console.WriteLine(matrix + matrix);
+
+            SquareMatrix<Complex<int>> sqM = new(diag);
+            Console.WriteLine(sqM);
+            Console.WriteLine(sqM.IsDiagonal());
         }
     }
 
